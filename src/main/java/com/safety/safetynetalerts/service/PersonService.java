@@ -5,59 +5,60 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.safety.safetynetalerts.model.ChildrenByAddressDto;
 import com.safety.safetynetalerts.model.Person;
-import com.safety.safetynetalerts.repository.PersonRepository;
+import com.safety.safetynetalerts.model.PersonByAddressDto;
+import com.safety.safetynetalerts.model.PersonByFirstEtLastNameDto;
+import com.safety.safetynetalerts.repository.PersonRepositoyImpl;
 
-import lombok.Data;
-
-@Data
 @Service("personService")
 public class PersonService {
 
-	@Autowired(required=true)
-	private PersonRepository personRepository;
+	@Autowired(required = true)
+	private PersonRepositoyImpl personRepository;
 
-	public PersonService(PersonRepository personRepository) {
+	public PersonService(PersonRepositoyImpl personRepository) {
 		super();
 		this.personRepository = personRepository;
 	}
 
-	public void setPersonRepository(PersonRepository personRepository) {
+	public void setPersonRepository(PersonRepositoyImpl personRepository) {
 		this.personRepository = personRepository;
 	}
 
-	public List<Person> getPerson(String firstName, String lastName) {
-		return personRepository.findByFirstAndLastName(firstName, lastName);
+	public List<Person> getAllPersons() {
+		return personRepository.findAllPersons();
+	}
+
+	public PersonByFirstEtLastNameDto getPersonByFirstLastName(String firstName, String lastName) {
+		return personRepository.findPersonsByFirstAndLastName(firstName, lastName);
+	}
+
+	public PersonByAddressDto getPersonsByAdresse(String address) {
+		return personRepository.findPersonsByAddress(address);
 	}
 
 	public Person addPerson(Person person) {
 		person.setFirstName(person.getFirstName());
 		person.setLastName(person.getLastName());
-		person.setAdress(person.getAddress());
+		person.setAddress(person.getAddress());
 		person.setCity(person.getCity());
 		person.setZip(person.getZip());
 		person.setEmail(person.getEmail());
 		person.setPhone(person.getPhone());
-		person.setId(person.getId());
-		Person addedPerson = personRepository.savePerson(person);
-		return addedPerson;
-	}
-
-	public Person updatePerson(String firstName, String lastName) {
-		personRepository.findByFirstAndLastName(firstName, lastName);
-		Person person = new Person();
-		person.setLastName(person.getLastName());
-		person.setAdress(person.getAddress());
-		person.setCity(person.getCity());
-		person.setZip(person.getZip());
-		person.setEmail(person.getEmail());
-		person.setPhone(person.getPhone());
-
 		Person addedPerson = personRepository.savePerson(person);
 		return addedPerson;
 	}
 
 	public void deletePerson(String firstName, String lastName) {
-		personRepository.deleteByFirstAndLastName(firstName, lastName);
+		personRepository.deletePersonByFirstAndLastName(firstName, lastName);
+	}
+
+	public List<String> getEmailByCity(String city) {
+		return personRepository.getEmailByCity(city);
+	}
+	
+	public ChildrenByAddressDto findChildrenByAddress(String address) {
+		return personRepository.findChildrenByAdress(address);
 	}
 }

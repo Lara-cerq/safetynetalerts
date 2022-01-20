@@ -1,25 +1,23 @@
 package com.safety.safetynetalerts.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.safety.safetynetalerts.model.ChildrenByAddressDto;
 import com.safety.safetynetalerts.model.Person;
-import com.safety.safetynetalerts.repository.PersonRepository;
+import com.safety.safetynetalerts.model.PersonByAddressDto;
+import com.safety.safetynetalerts.model.PersonByFirstEtLastNameDto;
 import com.safety.safetynetalerts.service.PersonService;
 
 @CrossOrigin
@@ -28,21 +26,46 @@ import com.safety.safetynetalerts.service.PersonService;
 public class PersonController {
 
 	@Autowired
-//	@Qualifier("personService")
 	private PersonService personService;
 
+	@RequestMapping(value = "/allPersons", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE
+)
+	public List<Person> findPersons() {
+		return personService.getAllPersons();
+	}
+	
+	// http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
+	@GetMapping("/personInfo")
+	public PersonByFirstEtLastNameDto findPerson(@RequestParam String firstName, String lastName) {
+		return personService.getPersonByFirstLastName(firstName, lastName);
+	}
+
+//	//http://localhost:8080/fire?address=<address>
+	@GetMapping("/fire")
+	public PersonByAddressDto findPersonByAdress(@RequestParam String address) {
+		return personService.getPersonsByAdresse(address);
+	}
+	
 	@RequestMapping(value = "/addPerson", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE
 )
 	public Person addPerson(@RequestBody Person person) {
 		return personService.addPerson(person);
 	}
 	
-	@RequestMapping(value = "/person{firstName}/{lastName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE
-)
-	public List<Person> findPerson(@PathVariable String firstName, String lastName) {
-		return personService.getPerson(firstName, lastName);
+	// http://localhost:8080/communityEmail?city=<city>
+	@GetMapping("/communityEmail") 
+	@ResponseBody
+	public List<String> getEmailByCity(@RequestParam String city) {
+		return personService.getEmailByCity(city);
 	}
-
+	
+//	http://localhost:8080/childAlert?address=<address>
+	@GetMapping("/childAlert") 
+	public ChildrenByAddressDto findChildrenByAddress(@RequestParam String address) {
+		return personService.findChildrenByAddress(address);
+	}
+	
+	
 //	@GetMapping("/person/{firstName}/{lastName}")
 //	@RequestMapping(value = "/person/{firstName}/{lastName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 //	public Person updatePerson(@PathVariable("firstName, lastName") final String firstName, final String lastName,

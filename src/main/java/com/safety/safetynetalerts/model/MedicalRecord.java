@@ -8,8 +8,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class MedicalRecord {
-	
-	private Long idMedicalRecords;
 
 	private String firstName;
 
@@ -20,13 +18,19 @@ public class MedicalRecord {
 	private List<String> medications;
 
 	private List<String> allergies;
-
-	public Long getIdMedicalRecords() {
-		return idMedicalRecords;
+	
+	public MedicalRecord() {
+		super();
 	}
 
-	public void setIdMedicalRecords(Long idMedicalRecords) {
-		this.idMedicalRecords = idMedicalRecords;
+	public MedicalRecord(String firstName, String lastName, String birthdate, List<String> medications,
+			List<String> allergies) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.birthdate = birthdate;
+		this.medications = medications;
+		this.allergies = allergies;
 	}
 
 	public String getFirstName() {

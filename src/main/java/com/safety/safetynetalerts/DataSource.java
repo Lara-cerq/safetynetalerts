@@ -6,11 +6,16 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safety.safetynetalerts.model.FireStation;
 import com.safety.safetynetalerts.model.MedicalRecord;
 import com.safety.safetynetalerts.model.Person;
 
+@Component
 public class DataSource {
 	
 	private List<Person> persons= new ArrayList<Person>();
@@ -41,7 +46,8 @@ public class DataSource {
 				+ medicalrecords;
 	}
 	
-	public static void main(String[] args) throws IOException {
+	@PostConstruct
+	private void init() throws IOException {
 
 		// read json file data to String
 		byte[] jsonData = Files.readAllBytes(Paths.get("data.json"));
@@ -51,7 +57,9 @@ public class DataSource {
 
 		// convert json string to object
 		DataSource dataSource = objectMapper.readValue(jsonData, DataSource.class);
-		System.out.println(dataSource.toString());
-		System.out.println(dataSource.getPersons());
+		
+		this.persons=dataSource.getPersons();
+		this.firestations=dataSource.getFirestations();
+		this.medicalrecords=dataSource.getMedicalrecords();
 	}
 }
