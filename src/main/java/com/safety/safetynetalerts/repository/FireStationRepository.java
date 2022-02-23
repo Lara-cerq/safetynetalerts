@@ -1,40 +1,29 @@
 package com.safety.safetynetalerts.repository;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.safety.safetynetalerts.model.FireStation;
-import com.safety.safetynetalerts.model.Person;
 import com.safety.safetynetalerts.model.PersonByStationDto;
-import com.safety.safetynetalerts.model.PersonByStationsAndAddressDto;
+import com.safety.safetynetalerts.model.PersonNamePhoneDto;
 
 public interface FireStationRepository {
-	
-	public List<FireStation> firestations = new ArrayList<FireStation>();
 
 	public List<FireStation> findAllFirestations();
 	
-	public List<FireStation> findFirestationByAdress(String address);
+	public FireStation saveFirestation(FireStation firestation);
 
-	public List<FireStation> findFirestationByStationNumber(Integer station);
-	
-	public ArrayList<String> findPersonsByStationNumber(Integer station);
-	
 	public PersonByStationDto findPersonsByStation(Integer station);
 	
-	public PersonByStationsAndAddressDto findPersonsByStations(List<Integer> stations);
-	
-	public List<Person> findPersonsByAddress(String address);
-	
+	public Map<String, List<PersonNamePhoneDto>>  findPersonsByStations(List<Integer> stations);
+
 	public List<String> findPhoneNumberByStationNumber(Integer station);
-	
-	public FireStation deleteFirestationByAddress(String address);
 
-	public FireStation deleteFirestationByStationNumber(Integer station);
+	public boolean deleteFirestationByAddress(String address);
 	
-	public FireStation updateFirestationByAddress(String address);
+	public boolean deleteFirestationByStation(Integer station);
 
-	public FireStation saveFirestation(FireStation firestation);
+	public FireStation updateFirestationByAddress(FireStation firestation);
 
 }

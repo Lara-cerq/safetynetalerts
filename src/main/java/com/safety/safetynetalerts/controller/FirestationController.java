@@ -1,16 +1,21 @@
 package com.safety.safetynetalerts.controller;
 
-import java.text.ParseException;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,48 +23,89 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safety.safetynetalerts.model.FireStation;
-import com.safety.safetynetalerts.model.Person;
 import com.safety.safetynetalerts.model.PersonByStationDto;
-import com.safety.safetynetalerts.model.PersonByStationsAndAddressDto;
+import com.safety.safetynetalerts.model.PersonNamePhoneDto;
 import com.safety.safetynetalerts.service.FirestationService;
 
 @CrossOrigin
 @RestController
-@RequestMapping(path = "/firestations")
 public class FirestationController {
 
 	@Autowired
 	private FirestationService firestationService;
 
-	@RequestMapping(value = "/allFirestations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	private static Logger logger = LoggerFactory.getLogger(PersonController.class);
+
+	@RequestMapping(value = "/allfirestations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<FireStation> findFirestations() {
 		return firestationService.getAllFirestations();
 	}
 
-	// http://localhost:8080/firestation?stationNumber=<station_number>
-//	@GetMapping("/firestation") 
-//	@ResponseBody
-//	public ArrayList<String> findPersonsByStationNumber(@RequestParam Integer stationNumber){
-//		return firestationService.getPersonsByStationNumber(stationNumber);
-//	}
+	@RequestMapping(value = "/firestation", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FireStation> addStation(@RequestBody FireStation firestation) {
+		FireStation firestationSaved = firestationService.saveFirestation(firestation);
+		logger.info("FIRESTATION CREATED");
+		return new ResponseEntity<>(firestationSaved, HttpStatus.CREATED);
+	}
 
-	@GetMapping("/firestation")
+	@PutMapping(value = "/firestation", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ResponseEntity<FireStation> updateFirestation(
+			@Validated @RequestBody FireStation newFirestation) throws IOException {
+		FireStation firestationUpdated = firestationService.updateFirestationByAddress(newFirestation);
+		logger.info("FIRESTATION UPDATED");
+		return new ResponseEntity<>(firestationUpdated, HttpStatus.OK);
+
+	}
+
+	// http://localhost:8080/firestation?address=
+	@DeleteMapping(value = "/firestation", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public PersonByStationDto findPersonsByStationNumber(@RequestParam Integer stationNumber) {
-		return firestationService.getPersonsByStation(stationNumber);
+	public ResponseEntity<Void> deleteFirestationByAddress(@RequestParam String address) throws IOException {
+//		URL url = new URL("http://localhost:8080/deletePerson");
+//		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//		connection.setRequestMethod("DELETE");
+//		int responseCode = connection.getResponseCode();
+		boolean isRemoved = firestationService.deleteFirestationByAddress(address);
+		if (!isRemoved) {
+			logger.info("FIRESTATION NOT DELETED");
+		}
+		logger.info("FIRESTATION DELETED");
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = "/firestation/station", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<Void> deleteFirestationByStation(@RequestParam Integer station) throws IOException  {
+		boolean isRemoved = firestationService.deleteFirestationByStation(station);
+		if (!isRemoved) {
+			logger.info("FIRESTATION NOT DELETED");
+		}
+		logger.info("FIRESTATION DELETED");
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	// http://localhost:8080/phoneAlert?firestation=<firestation_number>
 	@GetMapping("/phoneAlert")
 	@ResponseBody
-	public List<String> findPhoneNumberByStationNumber(@RequestParam Integer firestation) {
-		return firestationService.getPhoneNumbersByStationNumber(firestation);
+	public ResponseEntity<List<String>>findPhoneNumberByStationNumber(@RequestParam Integer firestation) {
+		List<String> phonesList= firestationService.getPhoneNumbersByStationNumber(firestation);
+		return new ResponseEntity<>(phonesList,HttpStatus.OK);
+		
 	}
 
-	//	http://localhost:8080/flood/stations?stations=<a list of station_numbers>
-	@GetMapping("/stations")
+	// http://localhost:8080/flood/stations?stations=<a list of station_numbers>
+	@GetMapping(value = "flood/stations", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public PersonByStationsAndAddressDto findPersonsByAListOfStations(@RequestParam List<Integer> firestations) {
-		return firestationService.getPersonsByStationAndAddress(firestations);
+	public ResponseEntity<Map<String, List<PersonNamePhoneDto>>> findPersonsByAListOfStations(@RequestParam List<Integer> stations) {
+		Map<String, List<PersonNamePhoneDto>> personsByAddress= firestationService.getPersonsByStationAndAddress(stations);
+		return new ResponseEntity<>(personsByAddress,HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "firestations", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<PersonByStationDto> getPersonsByStation(@RequestParam Integer stationNumber) {
+		PersonByStationDto personsByStation= firestationService.getPersonsByStation(stationNumber);
+		return new ResponseEntity<>(personsByStation, HttpStatus.OK);
+	}
+	
 }

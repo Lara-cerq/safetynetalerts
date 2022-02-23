@@ -4,52 +4,22 @@ import java.util.List;
 
 public class PersonByAddressDto {
 
-	private List<PersonNamePhoneDto> personDto;
+	private List<PersonNamePhoneStationDto> personsByAddress;
 
-	private List<MedicalRecordDto> medicalRecordDto;
-
-	private Integer station;
-
-	public List<PersonNamePhoneDto> getPersonDto() {
-		return personDto;
+	public List<PersonNamePhoneStationDto> getPersonDto() {
+		return personsByAddress;
 	}
 
-	public void setPersonDto(List<PersonNamePhoneDto> personDto) {
-		this.personDto = personDto;
+	public void setPersonDto(List<PersonNamePhoneStationDto> personsByAddress) {
+		this.personsByAddress = personsByAddress;
 	}
 
-	public List<MedicalRecordDto> getMedicalRecordDto() {
-		return medicalRecordDto;
-	}
-
-	public void setMedicalRecordDto(List<MedicalRecordDto> medicalRecordDto) {
-		this.medicalRecordDto = medicalRecordDto;
-	}
-
-	public Integer getStation() {
-		return station;
-	}
-
-	public void setStation(Integer station) {
-		this.station = station;
-	}
-
-	public PersonByAddressDto(List<PersonNamePhoneDto> personDto, List<MedicalRecordDto> medicalRecordDto,
-			Integer station) {
+	public PersonByAddressDto(List<PersonNamePhoneStationDto> personsByAddress) {
 		super();
-		this.personDto = personDto;
-		this.medicalRecordDto = medicalRecordDto;
-		this.station = station;
+		this.personsByAddress = personsByAddress;
 	}
 
 	public PersonByAddressDto() {
 		super();
 	}
-
-	@Override
-	public String toString() {
-		return "PersonByAddressDto [personDto=" + personDto + ", medicalRecordDto=" + medicalRecordDto + ", station="
-				+ station + "]";
-	}
-
 }

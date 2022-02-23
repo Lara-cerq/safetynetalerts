@@ -1,12 +1,9 @@
 package com.safety.safetynetalerts.repository;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,15 +12,13 @@ import com.safety.safetynetalerts.DataSource;
 import com.safety.safetynetalerts.model.ChildrenByAddressDto;
 import com.safety.safetynetalerts.model.FireStation;
 import com.safety.safetynetalerts.model.MedicalRecord;
-import com.safety.safetynetalerts.model.MedicalRecordDto;
 import com.safety.safetynetalerts.model.Person;
 import com.safety.safetynetalerts.model.PersonByAddressDto;
 import com.safety.safetynetalerts.model.PersonByFirstEtLastNameDto;
 import com.safety.safetynetalerts.model.PersonDto;
-import com.safety.safetynetalerts.model.PersonNameAddressDto;
 import com.safety.safetynetalerts.model.PersonNameDto;
 import com.safety.safetynetalerts.model.PersonNameEmailDto;
-import com.safety.safetynetalerts.model.PersonNamePhoneDto;
+import com.safety.safetynetalerts.model.PersonNamePhoneStationDto;
 
 @Repository
 public class PersonRepositoyImpl implements PersonRepository {
@@ -37,21 +32,27 @@ public class PersonRepositoyImpl implements PersonRepository {
 	}
 
 	@Override
-	public Person deletePersonByFirstAndLastName(String firstName, String lastName) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean deletePersonByFirstAndLastName(String firstName, String lastName) {
+		List<Person> persons = findAllPersons();
+		boolean isRemoved = persons
+				.removeIf(person -> person.getFirstName().equals(firstName) && person.getLastName().equals(lastName));
+		return isRemoved;
 	}
 
 	@Override
-	public Person updatePersonByFirstAndLastName(String firstName, String lastName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Person updatePersonByFirstAndLastName(Person person) {
+		List<Person> persons = dataSource.getPersons();
+		int index = persons.indexOf(person);
+		persons.set(index, person);
+		return person;
+
 	}
 
 	@Override
 	public Person savePerson(Person person) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Person> persons = dataSource.getPersons();
+		persons.add(person);
+		return person;
 	}
 
 	@Override
@@ -59,13 +60,19 @@ public class PersonRepositoyImpl implements PersonRepository {
 		List<Person> persons = dataSource.getPersons();
 		List<MedicalRecord> medicalrecords = dataSource.getMedicalrecords();
 		List<FireStation> firestations = dataSource.getFirestations();
-		PersonNamePhoneDto personDto = new PersonNamePhoneDto();
-		MedicalRecordDto medicalRecordDto = new MedicalRecordDto();
-		List<PersonNamePhoneDto> personDtolist = new ArrayList<PersonNamePhoneDto>();
-		List<MedicalRecordDto> medicalRecordDtoList = new ArrayList<MedicalRecordDto>();
+		PersonNamePhoneStationDto personDto = new PersonNamePhoneStationDto();
+		List<PersonNamePhoneStationDto> personDtolist = new ArrayList<PersonNamePhoneStationDto>();
 		PersonByAddressDto personByAddressDto = new PersonByAddressDto();
 		int station = 0;
 		for (Person person : persons) {
+			for (FireStation firestation : firestations) {
+				if (person.getAddress().equals(firestation.getAddress())) {
+					person.setFirestation(firestation);
+					if (person.getAddress().equals(address)) {
+						station = firestation.getStation();
+					}
+				}
+			}
 			for (MedicalRecord medicalrecord : medicalrecords) {
 				if (medicalrecord.getLastName().equals(person.getLastName())
 						&& medicalrecord.getFirstName().equals(person.getFirstName())) {
@@ -81,19 +88,10 @@ public class PersonRepositoyImpl implements PersonRepository {
 								DateTimeFormatter.ofPattern("MM/dd/yyyy"));
 						LocalDate now = LocalDate.now();
 						long age = java.time.temporal.ChronoUnit.YEARS.between(birthDate, now);
-						personDto = new PersonNamePhoneDto(firstName, lastName, phone);
+						personDto = new PersonNamePhoneStationDto(firstName, lastName, phone, medications, allergies,
+								age, station);
 						personDtolist.add(personDto);
-						medicalRecordDto = new MedicalRecordDto(medications, allergies, age);
-						medicalRecordDtoList.add(medicalRecordDto);
-						personByAddressDto = new PersonByAddressDto(personDtolist, medicalRecordDtoList, station);
-					}
-				}
-			}
-			for (FireStation firestation : firestations) {
-				if (person.getAddress().equals(firestation.getAddress())) {
-					person.setFirestation(firestation);
-					if (person.getAddress().equals(address)) {
-						station = firestation.getStation();
+						personByAddressDto = new PersonByAddressDto(personDtolist);
 					}
 				}
 			}
@@ -133,24 +131,18 @@ public class PersonRepositoyImpl implements PersonRepository {
 						LocalDate now = LocalDate.now();
 						long age = java.time.temporal.ChronoUnit.YEARS.between(birthDate, now);
 						List<Person> persons2 = new ArrayList<Person>();
-						String lastName = "";
-						String firstName="";
 						PersonDto personDto2 = new PersonDto();
 						persons2.add(person);
 						if (age <= 18) {
-							firstName = person.getFirstName();
-							lastName = person.getLastName();
+							String firstName = person.getFirstName();
+							String lastName = person.getLastName();
 							PersonNameDto personDto = new PersonNameDto(firstName, lastName, age);
 							personNameList.add(personDto);
 						}
-						for (Person person2 : persons) {
-							if (lastName.equals(person2.getLastName())) {
-								String firstName2 = person2.getFirstName();
-								personDto2 = new PersonDto(firstName2, lastName);
-								personNameList2.add(personDto2);
-//								childrenByAdrress = new ChildrenByAddressDto(personNameList, personNameList2);
-							}
-						}
+						String firstName2 = person.getFirstName();
+						String lastName2 = person.getLastName();
+						personDto2 = new PersonDto(firstName2, lastName2);
+						personNameList2.add(personDto2);
 					}
 				}
 			}
@@ -164,7 +156,6 @@ public class PersonRepositoyImpl implements PersonRepository {
 		List<Person> persons = dataSource.getPersons();
 		List<MedicalRecord> medicalrecords = dataSource.getMedicalrecords();
 		List<PersonNameEmailDto> personDtolist = new ArrayList<PersonNameEmailDto>();
-		List<MedicalRecordDto> medicalRecordDtoList = new ArrayList<MedicalRecordDto>();
 		PersonByFirstEtLastNameDto personByNameDto = new PersonByFirstEtLastNameDto();
 		for (Person person : persons) {
 			for (MedicalRecord medicalrecord : medicalrecords) {
@@ -176,9 +167,6 @@ public class PersonRepositoyImpl implements PersonRepository {
 						String lastname = person.getLastName();
 						String address = person.getAddress();
 						String email = person.getEmail();
-						PersonNameEmailDto personNameEmailDto = new PersonNameEmailDto(firstname, lastname, email,
-								address);
-						personDtolist.add(personNameEmailDto);
 						MedicalRecord medicalRecord = person.getMedicalRecord();
 						List<String> allergies = medicalRecord.getAllergies();
 						List<String> medications = medicalRecord.getMedications();
@@ -186,9 +174,10 @@ public class PersonRepositoyImpl implements PersonRepository {
 								DateTimeFormatter.ofPattern("MM/dd/yyyy"));
 						LocalDate now = LocalDate.now();
 						long age = java.time.temporal.ChronoUnit.YEARS.between(birthDate, now);
-						MedicalRecordDto medicalrecordDto = new MedicalRecordDto(medications, allergies, 0L);
-						medicalRecordDtoList.add(medicalrecordDto);
-						personByNameDto = new PersonByFirstEtLastNameDto(personDtolist, medicalRecordDtoList);
+						PersonNameEmailDto personNameEmailDto = new PersonNameEmailDto(firstname, lastname, email,
+								address, medications, allergies, age);
+						personDtolist.add(personNameEmailDto);
+						personByNameDto = new PersonByFirstEtLastNameDto(personDtolist);
 					}
 				}
 			}

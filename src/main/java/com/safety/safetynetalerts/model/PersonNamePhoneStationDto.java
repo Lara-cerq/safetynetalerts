@@ -2,21 +2,21 @@ package com.safety.safetynetalerts.model;
 
 import java.util.List;
 
-public class PersonNamePhoneDto {
+public class PersonNamePhoneStationDto {
 
 	private String firstName;
 
 	private String lastName;
 
 	private String phone;
-	
-	private String address;
 
 	private List<String> medications;
 
 	private List<String> allergies;
 
 	private Long age;
+
+	private Integer station;
 
 	public String getFirstName() {
 		return firstName;
@@ -40,14 +40,6 @@ public class PersonNamePhoneDto {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}
-	
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
 	}
 
 	public List<String> getMedications() {
@@ -74,21 +66,28 @@ public class PersonNamePhoneDto {
 		this.age = age;
 	}
 
-	public PersonNamePhoneDto(String firstName, String lastName, String phone, String address, List<String> medications,
-			List<String> allergies, Long age) {
+	public Integer getStation() {
+		return station;
+	}
+
+	public void setStation(Integer station) {
+		this.station = station;
+	}
+
+	public PersonNamePhoneStationDto(String firstName, String lastName, String phone, List<String> medications,
+			List<String> allergies, Long age, Integer station) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phone = phone;
-		this.address = address;
 		this.medications = medications;
 		this.allergies = allergies;
 		this.age = age;
+		this.station = station;
 	}
 
-	public PersonNamePhoneDto() {
+	public PersonNamePhoneStationDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
 }

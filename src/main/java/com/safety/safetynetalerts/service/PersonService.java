@@ -39,19 +39,15 @@ public class PersonService {
 	}
 
 	public Person addPerson(Person person) {
-		person.setFirstName(person.getFirstName());
-		person.setLastName(person.getLastName());
-		person.setAddress(person.getAddress());
-		person.setCity(person.getCity());
-		person.setZip(person.getZip());
-		person.setEmail(person.getEmail());
-		person.setPhone(person.getPhone());
-		Person addedPerson = personRepository.savePerson(person);
-		return addedPerson;
+		return personRepository.savePerson(person);
 	}
 
-	public void deletePerson(String firstName, String lastName) {
-		personRepository.deletePersonByFirstAndLastName(firstName, lastName);
+    public boolean deletePerson(String firstName, String lastName) {
+    	return personRepository.deletePersonByFirstAndLastName(firstName, lastName);
+    }
+	
+	public Person updatePerson(Person person){
+		return personRepository.updatePersonByFirstAndLastName(person);
 	}
 
 	public List<String> getEmailByCity(String city) {

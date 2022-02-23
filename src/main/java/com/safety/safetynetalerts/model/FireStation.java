@@ -2,17 +2,24 @@ package com.safety.safetynetalerts.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
 public class FireStation {
 
+	@EqualsAndHashCode.Include
 	private String address;
 
 	private Integer station;
 
 	private Person person;
-	
+
 	private MedicalRecord medicalRecord;
 
 	public FireStation() {
@@ -25,40 +32,4 @@ public class FireStation {
 		this.station = station;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public Integer getStation() {
-		return station;
-	}
-
-	public void setStation(Integer station) {
-		this.station = station;
-	}
-
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
-	}
-
-	public MedicalRecord getMedicalRecord() {
-		return medicalRecord;
-	}
-
-	public void setMedicalRecord(MedicalRecord medicalRecord) {
-		this.medicalRecord = medicalRecord;
-	}
-
-	@Override
-	public String toString() {
-		return "address=" + address + ", station=" + station;
-	}
 }

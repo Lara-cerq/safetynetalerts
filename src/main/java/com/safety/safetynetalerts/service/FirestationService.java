@@ -1,16 +1,14 @@
 package com.safety.safetynetalerts.service;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safety.safetynetalerts.model.FireStation;
-import com.safety.safetynetalerts.model.Person;
 import com.safety.safetynetalerts.model.PersonByStationDto;
-import com.safety.safetynetalerts.model.PersonByStationsAndAddressDto;
+import com.safety.safetynetalerts.model.PersonNamePhoneDto;
 import com.safety.safetynetalerts.repository.FirestationRepositoryImpl;
 
 @Service
@@ -31,17 +29,21 @@ public class FirestationService {
 	public List<FireStation> getAllFirestations() {
 		return firestationRepository.findAllFirestations();
 	}
-
-	public List<FireStation> getFirestationByAdress(String address) {
-		return firestationRepository.findFirestationByAdress(address);
+	
+	public FireStation saveFirestation(FireStation firestation) {
+		return firestationRepository.saveFirestation(firestation);
+	}
+	
+	public boolean deleteFirestationByAddress(String address) {
+		return firestationRepository.deleteFirestationByAddress(address);
+	}
+	
+	public boolean deleteFirestationByStation(Integer station) {
+		return firestationRepository.deleteFirestationByStation(station);
 	}
 
-	public List<FireStation> getFirestationByStationNumber(Integer stationNumber) {
-		return firestationRepository.findFirestationByStationNumber(stationNumber);
-	}
-
-	public ArrayList<String> getPersonsByStationNumber(Integer station) {
-		return firestationRepository.findPersonsByStationNumber(station);
+	public FireStation updateFirestationByAddress(FireStation firestation) {
+		return firestationRepository.updateFirestationByAddress(firestation);
 	}
 
 	public PersonByStationDto getPersonsByStation(Integer station) {
@@ -51,8 +53,8 @@ public class FirestationService {
 	public List<String> getPhoneNumbersByStationNumber(Integer station) {
 		return firestationRepository.findPhoneNumberByStationNumber(station);
 	}
-	
-	public PersonByStationsAndAddressDto getPersonsByStationAndAddress(List<Integer> stations) {
+
+	public Map<String, List<PersonNamePhoneDto>> getPersonsByStationAndAddress(List<Integer> stations) {
 		return firestationRepository.findPersonsByStations(stations);
 	}
 

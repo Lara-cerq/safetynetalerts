@@ -1,15 +1,12 @@
 package com.safety.safetynetalerts.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.safety.safetynetalerts.DataSource;
-import com.safety.safetynetalerts.model.FireStation;
 import com.safety.safetynetalerts.model.MedicalRecord;
-import com.safety.safetynetalerts.model.Person;
 
 @Repository
 public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
@@ -19,31 +16,29 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
 
 	@Override
 	public List<MedicalRecord> findAllMedicalrecords() {
-		// TODO Auto-generated method stub
-		return null;
+		return dataSource.getMedicalrecords();
 	}
 
 	@Override
-	public List<MedicalRecord> findMedicalrecordsByFirstAndLastName(String firstName, String lastName) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean deleteMedicalrecordByFirstAndLastName(String firstName, String lastName) {
+		List<MedicalRecord> medicalrecords = findAllMedicalrecords();
+		boolean isRemoved = medicalrecords.removeIf(medicalrecord -> medicalrecord.getFirstName().equals(firstName)
+				&& medicalrecord.getLastName().equals(lastName));
+		return isRemoved;
 	}
 
 	@Override
-	public Person deleteMedicalrecordByFirstAndLastName(String firstName, String lastName) {
-		// TODO Auto-generated method stub
-		return null;
+	public MedicalRecord saveMedicalrecord(MedicalRecord medicalRecord) {
+		List<MedicalRecord> medicalrecords = findAllMedicalrecords();
+		medicalrecords.add(medicalRecord);
+		return medicalRecord;
 	}
 
 	@Override
-	public Person updateMedicalrecordByFirstAndLastName(String firstName, String lastName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Person saveMedicalrecord(MedicalRecord medicalRecord) {
-		// TODO Auto-generated method stub
-		return null;
+	public MedicalRecord updateMedicalrecord(MedicalRecord medicalRecord) {
+		List<MedicalRecord> medicalrecords = findAllMedicalrecords();
+		int index = medicalrecords.indexOf(medicalRecord);
+		medicalrecords.set(index, medicalRecord);
+		return medicalRecord;
 	}
 }

@@ -4,18 +4,18 @@ import java.util.List;
 
 public class PersonByStationDto {
 
-	private List<PersonNameAddressDto> personDto;
+	private List<PersonNameAddressDto> persons;
 
 	private Integer numberAdult;
 
 	private Integer numberChildren;
 
 	public List<PersonNameAddressDto> getPersonDto() {
-		return personDto;
+		return persons;
 	}
 
 	public void setPersonDto(List<PersonNameAddressDto> personDto) {
-		this.personDto = personDto;
+		this.persons = personDto;
 	}
 
 	public Integer getNumberAdult() {
@@ -36,7 +36,7 @@ public class PersonByStationDto {
 
 	public PersonByStationDto(List<PersonNameAddressDto> personDto, int numberAdult, int numberChildren) {
 		super();
-		this.personDto = personDto;
+		this.persons = personDto;
 		this.numberAdult = numberAdult;
 		this.numberChildren = numberChildren;
 	}
@@ -47,7 +47,7 @@ public class PersonByStationDto {
 
 	@Override
 	public String toString() {
-		return "PersonByStationDto [personDto=" + personDto + ", numberAdult=" + numberAdult + ", numberChildren="
+		return "PersonByStationDto [personDto=" + persons + ", numberAdult=" + numberAdult + ", numberChildren="
 				+ numberChildren + "]";
 	}
 

@@ -8,16 +8,12 @@ import com.safety.safetynetalerts.model.Person;
 
 public interface MedicalRecordRepository {
 
-	public List<MedicalRecord> medicalrecords = new ArrayList<MedicalRecord>();
-
 	public List<MedicalRecord> findAllMedicalrecords();
+
+	public boolean deleteMedicalrecordByFirstAndLastName(String firstName, String lastName);
+
+	public MedicalRecord saveMedicalrecord(MedicalRecord medicalRecord);
 	
-	public List<MedicalRecord> findMedicalrecordsByFirstAndLastName(String firstName, String lastName);
-
-	public Person deleteMedicalrecordByFirstAndLastName(String firstName, String lastName);
-
-	public Person updateMedicalrecordByFirstAndLastName(String firstName, String lastName);
-
-	public Person saveMedicalrecord(MedicalRecord medicalRecord);
+	public MedicalRecord updateMedicalrecord(MedicalRecord medicalRecord);
 	
 }

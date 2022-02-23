@@ -26,8 +26,17 @@ public class MedicalRecordService {
 	public List<MedicalRecord> getAllMedicalRecords() {
 		return medicalRecordRepository.findAllMedicalrecords();
 	}
+	
+	public MedicalRecord addMedicalrecord(MedicalRecord medicalrecord) {
+		return medicalRecordRepository.saveMedicalrecord(medicalrecord);
+	}
 
-	public List<MedicalRecord> getMedicalRecord(String firstName, String lastName) {
-		return medicalRecordRepository.findMedicalrecordsByFirstAndLastName(firstName, lastName);
+    public boolean deleteMedicalrecord(String firstName, String lastName) {
+    	return medicalRecordRepository.deleteMedicalrecordByFirstAndLastName(firstName, lastName);
+    }
+	
+	public MedicalRecord updateMedicalrecord(MedicalRecord medicalrecord){
+		medicalRecordRepository.updateMedicalrecord(medicalrecord);
+		return medicalRecordRepository.updateMedicalrecord(medicalrecord);
 	}
 }
