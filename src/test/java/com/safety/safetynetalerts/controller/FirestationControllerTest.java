@@ -163,7 +163,6 @@ public class FirestationControllerTest {
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 		.andExpect(content().string(containsString("15 Rue Verdi")))
 				.andExpect(content().string(containsString("Lara")));
-
 	}
 	
 	public static String asJsonString(final Object obj) {
