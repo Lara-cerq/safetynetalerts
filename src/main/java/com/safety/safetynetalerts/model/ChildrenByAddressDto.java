@@ -4,39 +4,33 @@ import java.util.List;
 
 public class ChildrenByAddressDto {
 
-	private List<PersonNameDto> personNameDto;
+	private List<PersonNameDto> childrens;
 
-	private List<PersonDto> personDto;
+	private List<PersonDto> persons;
 
-	public List<PersonNameDto> getPersonNameDto() {
-		return personNameDto;
+	public List<PersonNameDto> getChildrens() {
+		return childrens;
 	}
 
-	public void setPersonNameDto(List<PersonNameDto> personNameDto) {
-		this.personNameDto = personNameDto;
+	public void setPersonNameDto(List<PersonNameDto> childrens) {
+		this.childrens = childrens;
 	}
 
-	public List<PersonDto> getPersonDto() {
-		return personDto;
+	public List<PersonDto> getPersons() {
+		return persons;
 	}
 
-	public void setPersonDto(List<PersonDto> personDto) {
-		this.personDto = personDto;
+	public void setPersonDto(List<PersonDto> persons) {
+		this.persons = persons;
 	}
 
 	public ChildrenByAddressDto() {
 		super();
 	}
 
-	public ChildrenByAddressDto(List<PersonNameDto> personNameDto, List<PersonDto> personDto) {
+	public ChildrenByAddressDto(List<PersonNameDto> childrens, List<PersonDto> persons) {
 		super();
-		this.personNameDto = personNameDto;
-		this.personDto = personDto;
+		this.childrens = childrens;
+		this.persons = persons;
 	}
-
-	@Override
-	public String toString() {
-		return "ChildrenByAddressDto [personNameDto=" + personNameDto + ", personDto=" + personDto + "]";
-	}
-
 }

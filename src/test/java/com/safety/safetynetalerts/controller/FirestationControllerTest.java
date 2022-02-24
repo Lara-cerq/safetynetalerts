@@ -12,14 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -29,13 +27,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.safety.safetynetalerts.controller.FirestationController;
 import com.safety.safetynetalerts.model.FireStation;
 import com.safety.safetynetalerts.model.Person;
 import com.safety.safetynetalerts.model.PersonByStationDto;
 import com.safety.safetynetalerts.model.PersonNameAddressDto;
 import com.safety.safetynetalerts.model.PersonNamePhoneDto;
-import com.safety.safetynetalerts.repository.FirestationRepositoryImpl;
 import com.safety.safetynetalerts.service.FirestationService;
 
 @ExtendWith(SpringExtension.class)
@@ -87,13 +83,6 @@ public class FirestationControllerTest {
 		Mockito.when(firestationService.updateFirestationByAddress(Mockito.any(FireStation.class)))
 				.thenReturn(firestation);
 
-//		mockMvc.perform(
-//				MockMvcRequestBuilders.put("/firestation").content(asJsonString(new FireStation("1509 Culver St", 2)))
-//						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-//				.andExpect(status().isOk())
-//				.andExpect(MockMvcResultMatchers.jsonPath("$.address").value("1509 Culver St"))
-//				.andExpect(MockMvcResultMatchers.jsonPath("$.station").value(2));
-
 		MvcResult mvcResult = mockMvc
 				.perform(MockMvcRequestBuilders.put("/firestation")
 						.content(asJsonString(new FireStation("1509 Culver St", 2)))
@@ -114,9 +103,6 @@ public class FirestationControllerTest {
 				.perform(MockMvcRequestBuilders.delete("/firestation?address=1509 Culver St")
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
-//
-//		mockMvc.perform(MockMvcRequestBuilders.delete("/firestation?address=15 Rue Verdi")
-//				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 		assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
 	}
@@ -128,9 +114,6 @@ public class FirestationControllerTest {
 				.perform(MockMvcRequestBuilders.delete("/firestation/station?station=1")
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
-
-//		mockMvc.perform(MockMvcRequestBuilders.delete("/firestation/station?station=1")
-//				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 		assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
 	}
@@ -157,15 +140,10 @@ public class FirestationControllerTest {
 		PersonByStationDto personByStation = new PersonByStationDto(personNameAddressList, 1, 0);
 		Mockito.when(firestationService.getPersonsByStation(2)).thenReturn(personByStation);
 
-		mockMvc.perform(MockMvcRequestBuilders.get("/firestations?stationNumber=2")
+		mockMvc.perform(MockMvcRequestBuilders.get("/firestation?stationNumber=2")
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-//				.andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Lara"))
-//				.andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Cerqueira"))
-//				.andExpect(MockMvcResultMatchers.jsonPath("$.address").value("15 Rue Verdi"))
-//				.andExpect(MockMvcResultMatchers.jsonPath("$.phone").value("0123456789"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.numberAdult").value(1))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.numberChildren").value(0));
-
 	}
 	
 	@Test

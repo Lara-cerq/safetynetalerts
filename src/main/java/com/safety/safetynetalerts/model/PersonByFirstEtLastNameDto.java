@@ -4,23 +4,23 @@ import java.util.List;
 
 public class PersonByFirstEtLastNameDto {
 
-	private List<PersonNameEmailDto> personDto;
+	private List<PersonNameEmailDto> persons;
 
-	public List<PersonNameEmailDto> getPersonDto() {
-		return personDto;
+	public List<PersonNameEmailDto> getPersons() {
+		return persons;
 	}
 
-	public void setPersonDto(List<PersonNameEmailDto> personDto) {
-		this.personDto = personDto;
+	public void setPersonDto(List<PersonNameEmailDto> persons) {
+		this.persons = persons;
 	}
 
 	public PersonByFirstEtLastNameDto() {
 		super();
 	}
 
-	public PersonByFirstEtLastNameDto(List<PersonNameEmailDto> personDto) {
+	public PersonByFirstEtLastNameDto(List<PersonNameEmailDto> persons) {
 		super();
-		this.personDto = personDto;
+		this.persons = persons;
 	}
 
 }

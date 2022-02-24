@@ -16,8 +16,6 @@ public class PersonNamePhoneStationDto {
 
 	private Long age;
 
-	private Integer station;
-
 	public String getFirstName() {
 		return firstName;
 	}
@@ -66,16 +64,8 @@ public class PersonNamePhoneStationDto {
 		this.age = age;
 	}
 
-	public Integer getStation() {
-		return station;
-	}
-
-	public void setStation(Integer station) {
-		this.station = station;
-	}
-
 	public PersonNamePhoneStationDto(String firstName, String lastName, String phone, List<String> medications,
-			List<String> allergies, Long age, Integer station) {
+			List<String> allergies, Long age) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -83,7 +73,6 @@ public class PersonNamePhoneStationDto {
 		this.medications = medications;
 		this.allergies = allergies;
 		this.age = age;
-		this.station = station;
 	}
 
 	public PersonNamePhoneStationDto() {

@@ -89,9 +89,9 @@ public class PersonRepositoyImpl implements PersonRepository {
 						LocalDate now = LocalDate.now();
 						long age = java.time.temporal.ChronoUnit.YEARS.between(birthDate, now);
 						personDto = new PersonNamePhoneStationDto(firstName, lastName, phone, medications, allergies,
-								age, station);
+								age);
 						personDtolist.add(personDto);
-						personByAddressDto = new PersonByAddressDto(personDtolist);
+						personByAddressDto = new PersonByAddressDto(personDtolist, station);
 					}
 				}
 			}

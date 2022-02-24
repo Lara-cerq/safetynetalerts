@@ -1,15 +1,12 @@
 package com.safety.safetynetalerts.controller;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthContributor;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,10 +66,6 @@ public class PersonController implements HealthIndicator {
 	@ResponseBody
 	public ResponseEntity<Void> deletePerson(@RequestParam String firstName, @RequestParam String lastName)
 			throws IOException {
-//		URL url = new URL("http://localhost:8080/deletePerson");
-//		HttpURLConnection connection = (HttpURLConnection) url.openConnection()²;
-//		connection.setRequestMethod("DELETE");
-//		int responseCode = connection.getResponseCode();
 		boolean isRemoved = personService.deletePerson(firstName, lastName);
 		if (!isRemoved) {
 			logger.info("PERSON NOT DELETED");

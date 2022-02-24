@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
-import org.jacoco.maven.ReportAggregateMojo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

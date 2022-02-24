@@ -10,12 +10,12 @@ public class PersonByStationDto {
 
 	private Integer numberChildren;
 
-	public List<PersonNameAddressDto> getPersonDto() {
+	public List<PersonNameAddressDto> getPersons() {
 		return persons;
 	}
 
-	public void setPersonDto(List<PersonNameAddressDto> personDto) {
-		this.persons = personDto;
+	public void setPersons(List<PersonNameAddressDto> persons) {
+		this.persons = persons;
 	}
 
 	public Integer getNumberAdult() {
@@ -34,20 +34,21 @@ public class PersonByStationDto {
 		this.numberChildren = numberChildren;
 	}
 
-	public PersonByStationDto(List<PersonNameAddressDto> personDto, int numberAdult, int numberChildren) {
+	public PersonByStationDto() {
 		super();
-		this.persons = personDto;
+		// TODO Auto-generated constructor stub
+	}
+
+	public PersonByStationDto(List<PersonNameAddressDto> persons, Integer numberAdult, Integer numberChildren) {
+		super();
+		this.persons = persons;
 		this.numberAdult = numberAdult;
 		this.numberChildren = numberChildren;
 	}
 
-	public PersonByStationDto() {
-		super();
-	}
-
 	@Override
 	public String toString() {
-		return "PersonByStationDto [personDto=" + persons + ", numberAdult=" + numberAdult + ", numberChildren="
+		return "PersonByStationDto [persons=" + persons + ", numberAdult=" + numberAdult + ", numberChildren="
 				+ numberChildren + "]";
 	}
 

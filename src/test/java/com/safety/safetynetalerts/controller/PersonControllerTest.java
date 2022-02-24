@@ -10,20 +10,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.protocol.HTTP;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,7 +25,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.safety.safetynetalerts.controller.PersonController;
 import com.safety.safetynetalerts.model.ChildrenByAddressDto;
 import com.safety.safetynetalerts.model.Person;
 import com.safety.safetynetalerts.model.PersonByAddressDto;
@@ -40,7 +33,6 @@ import com.safety.safetynetalerts.model.PersonDto;
 import com.safety.safetynetalerts.model.PersonNameDto;
 import com.safety.safetynetalerts.model.PersonNameEmailDto;
 import com.safety.safetynetalerts.model.PersonNamePhoneStationDto;
-import com.safety.safetynetalerts.repository.PersonRepositoyImpl;
 import com.safety.safetynetalerts.service.PersonService;
 
 @ExtendWith(SpringExtension.class)
@@ -172,10 +164,10 @@ public class PersonControllerTest {
 		List<String> medications = new ArrayList<>();
 		List<String> allergies = new ArrayList<>();
 		PersonNamePhoneStationDto personNamePhoneStation = new PersonNamePhoneStationDto("John", "Boyd", "45855254",
-				medications, allergies, 45L, 1);
+				medications, allergies, 45L);
 		List<PersonNamePhoneStationDto> personNamePhoneStationList = new ArrayList<>();
 		personNamePhoneStationList.add(personNamePhoneStation);
-		PersonByAddressDto personByAddress = new PersonByAddressDto(personNamePhoneStationList);
+		PersonByAddressDto personByAddress = new PersonByAddressDto(personNamePhoneStationList,1);
 		Mockito.when(personService.getPersonsByAdresse("1509 Culver St")).thenReturn(personByAddress);
 
 		this.mockMvc.perform(get("/fire?address=1509 Culver St")).andExpect(status().isOk())

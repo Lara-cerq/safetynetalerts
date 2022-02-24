@@ -1,6 +1,5 @@
 package com.safety.safetynetalerts.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.safety.safetynetalerts.model.ChildrenByAddressDto;

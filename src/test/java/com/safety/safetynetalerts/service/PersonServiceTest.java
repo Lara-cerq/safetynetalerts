@@ -73,9 +73,9 @@ public class PersonServiceTest {
 		FireStation station = new FireStation("Nice", 1);
 		List<PersonNamePhoneStationDto> personDtolist = new ArrayList<>();
 		PersonNamePhoneStationDto personDto = new PersonNamePhoneStationDto(person.getFirstName(),
-				person.getFirstName(), person.getAddress(), medications, allergies, 18L, station.getStation());
+				person.getFirstName(), person.getAddress(), medications, allergies, 18L);
 		personDtolist.add(personDto);
-		PersonByAddressDto personByAddressDto = new PersonByAddressDto(personDtolist);
+		PersonByAddressDto personByAddressDto = new PersonByAddressDto(personDtolist, station.getStation());
 
 		Mockito.when(personRepository.findPersonsByAddress("Nice")).thenReturn(personByAddressDto);
 		PersonByAddressDto personByAddressDtoResultat = personService.getPersonsByAdresse("Nice");

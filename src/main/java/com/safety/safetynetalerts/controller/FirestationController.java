@@ -101,7 +101,7 @@ public class FirestationController {
 		return new ResponseEntity<>(personsByAddress,HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "firestations", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "firestation", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<PersonByStationDto> getPersonsByStation(@RequestParam Integer stationNumber) {
 		PersonByStationDto personsByStation= firestationService.getPersonsByStation(stationNumber);

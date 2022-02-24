@@ -4,19 +4,30 @@ import java.util.List;
 
 public class PersonByAddressDto {
 
-	private List<PersonNamePhoneStationDto> personsByAddress;
+	private List<PersonNamePhoneStationDto> persons;
 
-	public List<PersonNamePhoneStationDto> getPersonDto() {
-		return personsByAddress;
+	private Integer station;
+
+	public List<PersonNamePhoneStationDto> getPersons() {
+		return persons;
 	}
 
-	public void setPersonDto(List<PersonNamePhoneStationDto> personsByAddress) {
-		this.personsByAddress = personsByAddress;
+	public void setPersons(List<PersonNamePhoneStationDto> persons) {
+		this.persons = persons;
 	}
 
-	public PersonByAddressDto(List<PersonNamePhoneStationDto> personsByAddress) {
+	public Integer getStation() {
+		return station;
+	}
+
+	public void setStation(Integer station) {
+		this.station = station;
+	}
+
+	public PersonByAddressDto(List<PersonNamePhoneStationDto> persons, Integer station) {
 		super();
-		this.personsByAddress = personsByAddress;
+		this.persons = persons;
+		this.station = station;
 	}
 
 	public PersonByAddressDto() {
