@@ -1,6 +1,5 @@
 package com.safety.safetynetalerts;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,7 +15,6 @@ import com.safety.safetynetalerts.model.FireStation;
 import com.safety.safetynetalerts.model.MedicalRecord;
 import com.safety.safetynetalerts.model.Person;
 
-import javassist.expr.NewArray;
 
 @Component
 public class DataSource {
@@ -57,13 +55,10 @@ public class DataSource {
 	@PostConstruct
 	private void init() throws IOException {
 
-		// read json file data to String
 		byte[] jsonData = Files.readAllBytes(Paths.get("data.json"));
 
-		// create ObjectMapper instance
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		// convert json string to object
 		DataSource dataSource = objectMapper.readValue(jsonData, DataSource.class);
 
 		this.persons = dataSource.getPersons();

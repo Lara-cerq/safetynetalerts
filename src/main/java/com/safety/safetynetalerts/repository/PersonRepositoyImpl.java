@@ -41,7 +41,7 @@ public class PersonRepositoyImpl implements PersonRepository {
 
 	@Override
 	public Person updatePersonByFirstAndLastName(Person person) {
-		List<Person> persons = dataSource.getPersons();
+		List<Person> persons = findAllPersons();
 		int index = persons.indexOf(person);
 		persons.set(index, person);
 		return person;
@@ -50,14 +50,14 @@ public class PersonRepositoyImpl implements PersonRepository {
 
 	@Override
 	public Person savePerson(Person person) {
-		List<Person> persons = dataSource.getPersons();
+		List<Person> persons = findAllPersons();
 		persons.add(person);
 		return person;
 	}
 
 	@Override
 	public PersonByAddressDto findPersonsByAddress(String address) {
-		List<Person> persons = dataSource.getPersons();
+		List<Person> persons = findAllPersons();
 		List<MedicalRecord> medicalrecords = dataSource.getMedicalrecords();
 		List<FireStation> firestations = dataSource.getFirestations();
 		PersonNamePhoneStationDto personDto = new PersonNamePhoneStationDto();
@@ -101,7 +101,7 @@ public class PersonRepositoyImpl implements PersonRepository {
 
 	@Override
 	public List<String> getEmailByCity(String city) {
-		List<Person> persons = dataSource.getPersons();
+		List<Person> persons = findAllPersons();
 		List<String> emailList = new ArrayList<String>();
 		for (Person person : persons) {
 			if (person.getCity().equals(city)) {
@@ -114,7 +114,7 @@ public class PersonRepositoyImpl implements PersonRepository {
 
 	@Override
 	public ChildrenByAddressDto findChildrenByAdress(String address) {
-		List<Person> persons = dataSource.getPersons();
+		List<Person> persons = findAllPersons();
 		List<MedicalRecord> medicalrecords = dataSource.getMedicalrecords();
 		ChildrenByAddressDto childrenByAdrress = new ChildrenByAddressDto();
 		List<PersonNameDto> personNameList = new ArrayList<PersonNameDto>();
@@ -138,11 +138,12 @@ public class PersonRepositoyImpl implements PersonRepository {
 							String lastName = person.getLastName();
 							PersonNameDto personDto = new PersonNameDto(firstName, lastName, age);
 							personNameList.add(personDto);
+						} else {
+							String firstName2 = person.getFirstName();
+							String lastName2 = person.getLastName();
+							personDto2 = new PersonDto(firstName2, lastName2);
+							personNameList2.add(personDto2);
 						}
-						String firstName2 = person.getFirstName();
-						String lastName2 = person.getLastName();
-						personDto2 = new PersonDto(firstName2, lastName2);
-						personNameList2.add(personDto2);
 					}
 				}
 			}
@@ -153,7 +154,7 @@ public class PersonRepositoyImpl implements PersonRepository {
 
 	@Override
 	public PersonByFirstEtLastNameDto findPersonsByFirstAndLastName(String firstName, String lastName) {
-		List<Person> persons = dataSource.getPersons();
+		List<Person> persons = findAllPersons();
 		List<MedicalRecord> medicalrecords = dataSource.getMedicalrecords();
 		List<PersonNameEmailDto> personDtolist = new ArrayList<PersonNameEmailDto>();
 		PersonByFirstEtLastNameDto personByNameDto = new PersonByFirstEtLastNameDto();

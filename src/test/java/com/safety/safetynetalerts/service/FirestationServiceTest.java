@@ -38,7 +38,7 @@ public class FirestationServiceTest {
 		firestations.add(firestation);
 		Mockito.when(firestationRepository.findAllFirestations()).thenReturn(firestations);
 		List<FireStation> firestationsresultat = firestationService.getAllFirestations();
-		assertEquals(firestationsresultat, firestations);
+		assertEquals(firestationsresultat.toString(), firestations.toString());
 	}
 
 	@Test

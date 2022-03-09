@@ -7,6 +7,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,7 @@ import com.safety.safetynetalerts.service.FirestationService;
 
 @CrossOrigin
 @RestController
-public class FirestationController {
+public class FirestationController implements HealthIndicator{
 
 	@Autowired
 	private FirestationService firestationService;
@@ -57,14 +59,9 @@ public class FirestationController {
 
 	}
 
-	// http://localhost:8080/firestation?address=
 	@DeleteMapping(value = "/firestation", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<Void> deleteFirestationByAddress(@RequestParam String address) throws IOException {
-//		URL url = new URL("http://localhost:8080/deletePerson");
-//		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//		connection.setRequestMethod("DELETE");
-//		int responseCode = connection.getResponseCode();
 		boolean isRemoved = firestationService.deleteFirestationByAddress(address);
 		if (!isRemoved) {
 			logger.info("FIRESTATION NOT DELETED");
@@ -75,7 +72,7 @@ public class FirestationController {
 
 	@DeleteMapping(value = "/firestation/station", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<Void> deleteFirestationByStation(@RequestParam Integer station) throws IOException  {
+	public ResponseEntity<Void> deleteFirestationByStation(@RequestParam Integer station) throws IOException {
 		boolean isRemoved = firestationService.deleteFirestationByStation(station);
 		if (!isRemoved) {
 			logger.info("FIRESTATION NOT DELETED");
@@ -84,28 +81,35 @@ public class FirestationController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	// http://localhost:8080/phoneAlert?firestation=<firestation_number>
 	@GetMapping("/phoneAlert")
 	@ResponseBody
-	public ResponseEntity<List<String>>findPhoneNumberByStationNumber(@RequestParam Integer firestation) {
-		List<String> phonesList= firestationService.getPhoneNumbersByStationNumber(firestation);
-		return new ResponseEntity<>(phonesList,HttpStatus.OK);
-		
+	public ResponseEntity<List<String>> findPhoneNumberByStationNumber(@RequestParam Integer firestation) {
+		List<String> phonesList = firestationService.getPhoneNumbersByStationNumber(firestation);
+		return new ResponseEntity<>(phonesList, HttpStatus.OK);
+
 	}
 
-	// http://localhost:8080/flood/stations?stations=<a list of station_numbers>
 	@GetMapping(value = "flood/stations", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<Map<String, List<PersonNamePhoneDto>>> findPersonsByAListOfStations(@RequestParam List<Integer> stations) {
-		Map<String, List<PersonNamePhoneDto>> personsByAddress= firestationService.getPersonsByStationAndAddress(stations);
-		return new ResponseEntity<>(personsByAddress,HttpStatus.OK);
+	public ResponseEntity<Map<String, List<PersonNamePhoneDto>>> findPersonsByAListOfStations(
+			@RequestParam List<Integer> stations) {
+		Map<String, List<PersonNamePhoneDto>> personsByAddress = firestationService
+				.getPersonsByStationAndAddress(stations);
+		return new ResponseEntity<>(personsByAddress, HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = "firestation", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<PersonByStationDto> getPersonsByStation(@RequestParam Integer stationNumber) {
-		PersonByStationDto personsByStation= firestationService.getPersonsByStation(stationNumber);
+		PersonByStationDto personsByStation = firestationService.getPersonsByStation(stationNumber);
 		return new ResponseEntity<>(personsByStation, HttpStatus.OK);
 	}
-	
+	@Override
+	public Health health() {
+		List<FireStation> firestations = firestationService.getAllFirestations();
+		if (firestations.isEmpty()) {
+			return Health.down().build();
+		}
+		return Health.up().build();
+	}
 }

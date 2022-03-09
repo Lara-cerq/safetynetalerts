@@ -48,7 +48,7 @@ public class PersonControllerTest {
 	@Test
 	public void testGetPersons() throws Exception {
 		List<Person> persons = new ArrayList<>();
-		Person person = new Person("Lara", "Cerqueira", "15 Rue verdi", "Nice", 06000L, "0123456", "lara@hotmail.com");
+		Person person = new Person("Lara", "Cerqueira", "Rue nice", "Nice", 06000L, "0123456", "lara@hotmail.com");
 		persons.add(person);
 		Mockito.when(personService.getAllPersons()).thenReturn(persons);
 		mockMvc.perform(get("/persons")).andDo(print()).andExpect(status().isOk())

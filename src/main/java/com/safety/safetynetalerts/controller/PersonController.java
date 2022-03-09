@@ -51,7 +51,6 @@ public class PersonController implements HealthIndicator {
 		return new ResponseEntity<>(personSaved, HttpStatus.CREATED);
 	}
 
-	// http://localhost:8080/updatePerson/John/Boyd
 	@PutMapping(value = "/person", produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ResponseEntity<Person> updatePerson(@Validated @RequestBody Person newPerson)
 			throws IOException {
@@ -61,7 +60,6 @@ public class PersonController implements HealthIndicator {
 
 	}
 
-	// http://localhost:8080/persons/deletePerson?firstName=John&lastName=Boyd
 	@DeleteMapping(value = "/person", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<Void> deletePerson(@RequestParam String firstName, @RequestParam String lastName)
@@ -74,7 +72,6 @@ public class PersonController implements HealthIndicator {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	// http://localhost:8080/personInfo?firstName=firstName&lastName=lastName
 	@GetMapping("/personInfo")
 	public ResponseEntity<PersonByFirstEtLastNameDto> findPerson(@RequestParam String firstName, String lastName) {
 		logger.info("Finding persons by first name=" + firstName + " and lastName=" + lastName);
@@ -82,14 +79,12 @@ public class PersonController implements HealthIndicator {
 		return new ResponseEntity<>(personFinded, HttpStatus.OK);
 	}
 
-//	//http://localhost:8080/fire?address=<address>
 	@GetMapping("/fire")
 	public ResponseEntity<PersonByAddressDto> findPersonByAddress(@RequestParam String address) {
 		PersonByAddressDto personByAddress= personService.getPersonsByAdresse(address);
 		return new ResponseEntity<>(personByAddress, HttpStatus.OK);
 	}
 
-	// http://localhost:8080/communityEmail?city=<city>
 	@GetMapping("/communityEmail")
 	@ResponseBody
 	public ResponseEntity<List<String>> getEmailByCity(@RequestParam String city) {
@@ -97,7 +92,6 @@ public class PersonController implements HealthIndicator {
 		return new ResponseEntity<>(emailList, HttpStatus.OK);
 	}
 
-//	http://localhost:8080/childAlert?address=<address>
 	@GetMapping("/childAlert")
 	public ResponseEntity<ChildrenByAddressDto> findChildrenByAddress(@RequestParam String address) {
 		ChildrenByAddressDto childrenByAddress= personService.findChildrenByAddress(address);

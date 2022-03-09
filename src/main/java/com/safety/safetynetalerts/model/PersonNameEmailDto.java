@@ -88,7 +88,6 @@ public class PersonNameEmailDto {
 
 	public PersonNameEmailDto() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 }

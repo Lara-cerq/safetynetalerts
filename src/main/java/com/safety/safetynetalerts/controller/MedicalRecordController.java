@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,45 +27,38 @@ import com.safety.safetynetalerts.service.MedicalRecordService;
 
 @CrossOrigin
 @RestController
-public class MedicalRecordController {
+public class MedicalRecordController implements HealthIndicator {
 
 	@Autowired
 	private MedicalRecordService medicalrecordService;
 
 	private static Logger logger = LoggerFactory.getLogger(PersonController.class);
 
-	// http://localhost:8080/medicalrecords
 	@RequestMapping(value = "/medicalrecords", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<MedicalRecord> findMedicalRecords() {
 		return medicalrecordService.getAllMedicalRecords();
 	}
 
-	// http://localhost:8080/medicalrecord
 	@RequestMapping(value = "/medicalrecord", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<MedicalRecord> addMedicalRecord(@RequestBody MedicalRecord medicalrecord) {
-		MedicalRecord medicalrecordSaved= medicalrecordService.addMedicalrecord(medicalrecord);
+		MedicalRecord medicalrecordSaved = medicalrecordService.addMedicalrecord(medicalrecord);
 		logger.info("MEDICALRECORD CREATED");
 		return new ResponseEntity<>(medicalrecordSaved, HttpStatus.CREATED);
 	}
 
-	// http://localhost:8080/medicalrecord
 	@PutMapping(value = "/medicalrecord", produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ResponseEntity<MedicalRecord> updateMedicalrecord(@Validated @RequestBody MedicalRecord newMedicalrecord) {
+	public @ResponseBody ResponseEntity<MedicalRecord> updateMedicalrecord(
+			@Validated @RequestBody MedicalRecord newMedicalrecord) {
 		MedicalRecord medicalrecordUpdated = medicalrecordService.updateMedicalrecord(newMedicalrecord);
 		logger.info("MEDICALRECORD UPDATED");
 		return new ResponseEntity<>(medicalrecordUpdated, HttpStatus.OK);
 
 	}
 
-	// http://localhost:8080/medicalrecord?firstName=John&lastName=Boyd
 	@DeleteMapping(value = "/medicalrecord", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<MedicalRecord> deleteMedicalrecord(@RequestParam String firstName, @RequestParam String lastName)
-			throws IOException {
-//		URL url = new URL("http://localhost:8080/deletePerson");
-//		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//		connection.setRequestMethod("DELETE");
-//		int responseCode = connection.getResponseCode();
+	public ResponseEntity<MedicalRecord> deleteMedicalrecord(@RequestParam String firstName,
+			@RequestParam String lastName) throws IOException {
 		boolean isRemoved = medicalrecordService.deleteMedicalrecord(firstName, lastName);
 		if (!isRemoved) {
 			logger.info("MEDICALRECORD NOT DELETED");
@@ -71,5 +66,12 @@ public class MedicalRecordController {
 		logger.info("MEDICALRECORD DELETED");
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
+	@Override
+	public Health health() {
+		List<MedicalRecord> medicalRecords = medicalrecordService.getAllMedicalRecords();
+		if (medicalRecords.isEmpty()) {
+			return Health.down().build();
+		}
+		return Health.up().build();
+	}
 }

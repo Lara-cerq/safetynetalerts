@@ -16,7 +16,7 @@ import com.safety.safetynetalerts.model.MedicalRecord;
 import com.safety.safetynetalerts.repository.MedicalRecordRepositoryImpl;
 
 @ExtendWith(MockitoExtension.class)
-public class MedicalRecordTest {
+public class MedicalRecordServiceTest {
 
 	@InjectMocks
 	private MedicalRecordService medicalrecordService;
@@ -33,7 +33,7 @@ public class MedicalRecordTest {
 		medicalrecords.add(medicalrecord);
 		Mockito.when(medicalRecordRepository.findAllMedicalrecords()).thenReturn(medicalrecords);
 		List<MedicalRecord> medicalrecordResultat = medicalrecordService.getAllMedicalRecords();
-		assertEquals(medicalrecords, medicalrecordResultat);
+		assertEquals(medicalrecords.toString(), medicalrecordResultat.toString());
 	}
 
 	@Test

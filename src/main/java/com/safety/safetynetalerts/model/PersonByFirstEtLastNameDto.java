@@ -10,17 +10,17 @@ public class PersonByFirstEtLastNameDto {
 		return persons;
 	}
 
-	public void setPersonDto(List<PersonNameEmailDto> persons) {
+	public void setPersons(List<PersonNameEmailDto> persons) {
 		this.persons = persons;
-	}
-
-	public PersonByFirstEtLastNameDto() {
-		super();
 	}
 
 	public PersonByFirstEtLastNameDto(List<PersonNameEmailDto> persons) {
 		super();
 		this.persons = persons;
+	}
+
+	public PersonByFirstEtLastNameDto() {
+		super();
 	}
 
 }

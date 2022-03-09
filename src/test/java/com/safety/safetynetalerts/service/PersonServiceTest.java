@@ -39,7 +39,7 @@ public class PersonServiceTest {
 		persons.add(person);
 		Mockito.when(personRepository.findAllPersons()).thenReturn(persons);
 		List<Person> personsResultat = personService.getAllPersons();
-		assertEquals(personsResultat, persons);
+		assertEquals(personsResultat.toString(), persons.toString());
 	}
 
 	@Test
